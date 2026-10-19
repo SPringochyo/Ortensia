@@ -1,15 +1,15 @@
-package dev.springochyo.ortensia.character.core;
+package dev.springochyo.ortensia.characteer.core;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Character {
+public class Characteer {
     private final String rulesetId;
     private final String name;
     private final String description;
-    private Map<String, Stat> stats = new HashMap<>();
+    private final Map<String, Stat> stats = new HashMap<>();
 
-    public Character(String rulesetId, String name, String description) {
+    public Characteer(String rulesetId, String name, String description) {
         this.rulesetId = rulesetId;
         this.name = name;
         this.description = description;
@@ -29,6 +29,10 @@ public class Character {
 
     public String getDescription() {
         return description;
+    }
+
+    public short getStatByName(String name) {
+        return stats.get(name).getCurrentValue();
     }
 
     public Map<String, Stat> getStats() {

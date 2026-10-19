@@ -1,4 +1,4 @@
-package dev.springochyo.ortensia.character.core;
+package dev.springochyo.ortensia.characteer.core;
 
 import dev.springochyo.ortensia.ruleset.core.StatType;
 
