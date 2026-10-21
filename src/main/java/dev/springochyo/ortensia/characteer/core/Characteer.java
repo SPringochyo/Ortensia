@@ -7,12 +7,20 @@ public class Characteer {
     private final String rulesetId;
     private final String name;
     private final String description;
-    private final Map<String, Stat> stats = new HashMap<>();
+    private final Map<String, Stat> stats;
 
     public Characteer(String rulesetId, String name, String description) {
         this.rulesetId = rulesetId;
         this.name = name;
         this.description = description;
+        stats = new HashMap<>();
+    }
+
+    public Characteer(String rulesetId, String name, String description, Map<String, Stat> stats) {
+        this.rulesetId = rulesetId;
+        this.name = name;
+        this.description = description;
+        this.stats = stats;
     }
 
     public void changeStatByName(String name, short diff) {

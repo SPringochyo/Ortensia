@@ -14,6 +14,10 @@ public class Stat {
         currentValue = type.clamp((short) (currentValue + diff));
     }
 
+    public void setCurrentValue(short currentValue) {
+        this.currentValue = currentValue;
+    }
+
     public StatType getType() {
         return type;
     }
