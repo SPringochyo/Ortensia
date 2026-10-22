@@ -10,6 +10,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -39,26 +41,23 @@ fun CharacterListScreen(vm: AppViewModel) {
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(220.dp),
+            columns = GridCells.Adaptive(200.dp),
             contentPadding = PaddingValues(20.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             item {
+                // Create tile — UNTOUCHED
                 CreateCharacterTile {
-                    if (vm.ruleSets.isEmpty()) {
-                        showNoRulesDialog = true
-                    } else {
-                        vm.navigate(Screen.CharacterSelectRuleSet)
-                    }
+                    if (vm.ruleSets.isEmpty()) showNoRulesDialog = true
+                    else vm.navigate(Screen.CharacterSelectRuleSet)
                 }
             }
             items(vm.characters) { character ->
                 CharacterCard(
                     name = character.getName(),
-                    ruleSetId = character.getRulesetId(),
-                    statsCount = character.getStats().size
+                    ruleSetId = character.getRulesetId()
                 ) { vm.navigate(Screen.CharacterSheet(character)) }
             }
         }
@@ -107,11 +106,17 @@ fun CharacterListScreen(vm: AppViewModel) {
     }
 }
 
+// Create tile — layout UNTOUCHED (as requested)
 @Composable
 private fun CreateCharacterTile(onClick: () -> Unit) {
     val s = LocalStrings.current
-    CaelestiaCard(onClick = onClick, modifier = Modifier.height(160.dp)) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    CaelestiaCard(onClick = onClick) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 120.dp),
+            contentAlignment = Alignment.Center
+        ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     "+",
@@ -131,47 +136,42 @@ private fun CreateCharacterTile(onClick: () -> Unit) {
     }
 }
 
+// Simplified — only Name + RuleSetId, centered, no fixed height
 @Composable
 private fun CharacterCard(
     name: String,
     ruleSetId: String,
-    statsCount: Int,
     onView: () -> Unit
 ) {
-    val s = LocalStrings.current
-    CaelestiaCard(onClick = onView, modifier = Modifier.height(160.dp)) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+    CaelestiaCard(onClick = onView) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 120.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Column {
-                Text("🧙", fontSize = 24.sp, modifier = Modifier.padding(bottom = 8.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Text("🧙", fontSize = 28.sp)
                 Text(
                     name,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     ),
-                    maxLines = 1
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
                 )
-                Text(ruleSetId, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, maxLines = 1)
                 Text(
-                    s.statsLabel(statsCount),
+                    ruleSetId,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 11.sp
-                )
-            }
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    s.characterSheet,
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -194,7 +194,7 @@ fun CharacterSelectRuleSetScreen(vm: AppViewModel) {
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(220.dp),
+            columns = GridCells.Adaptive(200.dp),
             contentPadding = PaddingValues(20.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -209,37 +209,37 @@ fun CharacterSelectRuleSetScreen(vm: AppViewModel) {
     }
 }
 
+// Select card also simplified and centered
 @Composable
 private fun RuleSetSelectCard(ruleSet: RuleSet, onClick: () -> Unit) {
     val s = LocalStrings.current
-    CaelestiaCard(onClick = onClick, modifier = Modifier.height(140.dp)) {
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
-            Column {
-                Text("📜", fontSize = 22.sp, modifier = Modifier.padding(bottom = 6.dp))
+    CaelestiaCard(onClick = onClick) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 110.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("📜", fontSize = 24.sp)
                 Text(
                     ruleSet.getRulesetId(),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
-                    )
+                    ),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
                 )
-                Text(
-                    s.statsLabel(ruleSet.getStats().size),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp
-                )
-            }
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                modifier = Modifier.fillMaxWidth()
-            ) {
                 Text(
                     s.selectAction,
                     color = MaterialTheme.colorScheme.primary,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }

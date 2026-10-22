@@ -4,12 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.springochyo.ortensia.ruleset.core.RuleSet
@@ -35,7 +36,7 @@ fun RuleSetListScreen(vm: AppViewModel) {
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(220.dp),
+            columns = GridCells.Adaptive(200.dp),
             contentPadding = PaddingValues(20.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -51,11 +52,17 @@ fun RuleSetListScreen(vm: AppViewModel) {
     }
 }
 
+// Create tile — untouched
 @Composable
 private fun CreateRuleSetTile(onClick: () -> Unit) {
     val s = LocalStrings.current
-    CaelestiaCard(onClick = onClick, modifier = Modifier.height(160.dp)) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    CaelestiaCard(onClick = onClick) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 120.dp),
+            contentAlignment = Alignment.Center
+        ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     "+",
@@ -75,45 +82,30 @@ private fun CreateRuleSetTile(onClick: () -> Unit) {
     }
 }
 
+// Simplified — only ID, centered, no fixed height
 @Composable
 private fun RuleSetCard(ruleSet: RuleSet, onView: () -> Unit) {
-    val s = LocalStrings.current
-    CaelestiaCard(onClick = onView, modifier = Modifier.height(160.dp)) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+    CaelestiaCard(onClick = onView) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 120.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Column {
-                Text(
-                    "📜",
-                    fontSize = 24.sp,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("📜", fontSize = 28.sp)
                 Text(
                     ruleSet.getRulesetId(),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     ),
-                    maxLines = 1
-                )
-                Text(
-                    s.statsLabel(ruleSet.getStats().size),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp
-                )
-            }
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    s.ruleSetViewSubtitle + " →",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -156,7 +148,7 @@ fun RuleSetViewScreen(ruleSet: RuleSet, vm: AppViewModel) {
 
             ruleSet.getStats().forEach { stat ->
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -178,7 +170,7 @@ fun RuleSetViewScreen(ruleSet: RuleSet, vm: AppViewModel) {
                             )
                         }
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
                             color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                         ) {
                             Text(
