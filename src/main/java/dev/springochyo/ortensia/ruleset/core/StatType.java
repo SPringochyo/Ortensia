@@ -48,6 +48,14 @@ public class StatType{
         return description;
     }
 
+    public String getMinValueFormula() {
+        return minValueFormula;
+    }
+
+    public String getMaxValueFormula() {
+        return maxValueFormula;
+    }
+
     public short getMinValue() {
         return minValue;
     }
@@ -56,12 +64,8 @@ public class StatType{
         return maxValue;
     }
 
-    public String getMinValueFormula() {
-        return minValueFormula;
-    }
-
-    public String getMaxValueFormula() {
-        return maxValueFormula;
+    public List<String> getDependencies() {
+        return dependencies;
     }
 
     public boolean isComputable() {

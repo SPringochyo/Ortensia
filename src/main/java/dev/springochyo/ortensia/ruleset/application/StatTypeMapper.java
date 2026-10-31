@@ -10,12 +10,25 @@ public class StatTypeMapper {
         return new StatTypeDto(
                 obj.getName(),
                 obj.getDescription(),
+                obj.getMinValueFormula(),
+                obj.getMaxValueFormula(),
                 obj.getMinValue(),
-                obj.getMaxValue()
+                obj.getMaxValue(),
+                obj.getDependencies(),
+                obj.isComputable()
         );
     }
 
     public static StatType toObj(StatTypeDto dto) {
+        if (dto.computable())
+            return new StatType(
+                    dto.name(),
+                    dto.description(),
+                    dto.minValueFormula(),
+                    dto.maxValueFormula(),
+                    dto.dependencies()
+            );
+
         return new StatType(
                 dto.name(),
                 dto.description(),

@@ -6,7 +6,9 @@ import dev.springochyo.ortensia.ruleset.core.RuleSet;
 import dev.springochyo.ortensia.ruleset.core.StatType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RuleSetMapper {
     private RuleSetMapper() {}
@@ -23,9 +25,9 @@ public class RuleSetMapper {
     }
 
     public static RuleSet toObj(RuleSetDto dto) {
-        List<StatType> stats = new ArrayList<>();
+        Map<String, StatType> stats = new HashMap<>();
         for (StatTypeDto type : dto.stats())
-            stats.add(StatTypeMapper.toObj(type));
+            stats.put(type.name(), StatTypeMapper.toObj(type));
 
         return new RuleSet(
                 dto.rulesetId(),
