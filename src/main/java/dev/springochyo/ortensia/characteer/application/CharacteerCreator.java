@@ -11,13 +11,14 @@ public class CharacteerCreator {
 
     public CharacteerCreator(RuleSet ruleSet, String name, String description) {
         this.ruleSet = ruleSet;
-        this.characteer = new Characteer(ruleSet.getRulesetId(), name, description);
-        for (StatType type : ruleSet.getStats()) {
-            characteer.getStats().put(type.getName(), new Stat(type));
+        this.characteer = new Characteer(ruleSet.getRulesetId(), name, description, ruleSet.getDepQueue());
+        for (String key : ruleSet.getStats().keySet()) {
+            characteer.getStats().put(key, new Stat(ruleSet.getStats().get(key)));
         }
     }
 
     public Characteer create() {
+        characteer.recomputeStats();
         return characteer;
     }
 }

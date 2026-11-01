@@ -15,8 +15,8 @@ public class RuleSetMapper {
 
     public static RuleSetDto toDto(RuleSet obj) {
         List<StatTypeDto> stats = new ArrayList<>();
-        for (StatType type : obj.getStats())
-            stats.add(StatTypeMapper.toDto(type));
+        for (String key : obj.getStats().keySet())
+            stats.add(StatTypeMapper.toDto(obj.getStats().get(key)));
 
         return new RuleSetDto(
                 obj.getRulesetId(),

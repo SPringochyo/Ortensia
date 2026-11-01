@@ -21,6 +21,7 @@ public class CharacteerMapper {
                 obj.getRulesetId(),
                 obj.getName(),
                 obj.getDescription(),
+                obj.getDepQueue(),
                 stats
         );
     }
@@ -31,16 +32,17 @@ public class CharacteerMapper {
         if (!ruleSet.getRulesetId().equals(dto.rulesetId()))
             throw new InvalidRuleSetException("Different ruleset id");
 
-        for (StatType type : ruleSet.getStats()) {
-            Stat stat = new Stat(type);
-            stat.setCurrentValue(dto.stats().get(type.getName()));
-            stats.put(type.getName(), stat);
+        for (String key : ruleSet.getStats().keySet()) {
+            Stat stat = new Stat(ruleSet.getStats().get(key));
+            stat.setCurrentValue(dto.stats().get(key));
+            stats.put(key, stat);
         }
 
         return new Characteer(
                 dto.rulesetId(),
                 dto.name(),
                 dto.description(),
+                dto.depQueue(),
                 stats
         );
     }

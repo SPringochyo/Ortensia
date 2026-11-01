@@ -1,5 +1,6 @@
 package dev.springochyo.ortensia.ruleset.application;
 
+import dev.springochyo.ortensia.ruleset.core.ComputeStrategy;
 import dev.springochyo.ortensia.ruleset.core.RuleSet;
 import dev.springochyo.ortensia.ruleset.core.StatType;
 import dev.springochyo.ortensia.utils.GraphUtils;
@@ -16,17 +17,17 @@ public class RuleSetCreator {
         this.ruleSet = new RuleSet(id);
     }
 
-    public RuleSetCreator addStat(String name, String description, short minValue, short maxValue) {
-        ruleSet.getStats().put(name, new StatType(name, description, minValue, maxValue));
+    public RuleSetCreator addStat(String name, String description, short minValue, short maxValue, short defaultValue) {
+        ruleSet.getStats().put(name, new StatType(name, description, minValue, maxValue, defaultValue));
         return this;
     }
 
-    public RuleSetCreator addStat(String name, String description, String minf, String maxf, List<String> deps) {
-        ruleSet.getStats().put(name, new StatType(name, description, minf, maxf, deps));
+    public RuleSetCreator addStat(String name, String description, String minf, String maxf, short defaultValue, List<String> deps, ComputeStrategy cs) {
+        ruleSet.getStats().put(name, new StatType(name, description, minf, maxf, defaultValue, deps, cs));
         return this;
     }
 
-    public RuleSetCreator createDepQueue() {
+    private void createDepQueue() {
         Map<String, List<String>> stats = new HashMap<>();
         for (String key : ruleSet.getStats().keySet()) {
             if (ruleSet.getStats().get(key).isComputable()) {
@@ -42,11 +43,10 @@ public class RuleSetCreator {
 
         ruleSet.getDepQueue().clear();
         ruleSet.getDepQueue().addAll(dependencies);
-
-        return this;
     }
 
     public RuleSet create() {
+        createDepQueue();
         return ruleSet;
     }
 }

@@ -14,8 +14,10 @@ public class StatTypeMapper {
                 obj.getMaxValueFormula(),
                 obj.getMinValue(),
                 obj.getMaxValue(),
+                obj.getDefaultValue(),
                 obj.getDependencies(),
-                obj.isComputable()
+                obj.isComputable(),
+                obj.getComputeStrategy()
         );
     }
 
@@ -26,14 +28,17 @@ public class StatTypeMapper {
                     dto.description(),
                     dto.minValueFormula(),
                     dto.maxValueFormula(),
-                    dto.dependencies()
+                    dto.defaultValue(),
+                    dto.dependencies(),
+                    dto.computeStrategy()
             );
 
         return new StatType(
                 dto.name(),
                 dto.description(),
                 dto.minValue(),
-                dto.maxValue()
+                dto.maxValue(),
+                dto.defaultValue()
         );
     }
 }
