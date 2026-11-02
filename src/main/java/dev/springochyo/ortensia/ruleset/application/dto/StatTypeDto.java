@@ -9,9 +9,9 @@ public record StatTypeDto(
         String description,
         String minValueFormula,
         String maxValueFormula,
-        short minValue,
-        short maxValue,
-        short defaultValue,
+        int minValue,
+        int maxValue,
+        int defaultValue,
         List<String> dependencies,
         boolean computable,
         ComputeStrategy computeStrategy

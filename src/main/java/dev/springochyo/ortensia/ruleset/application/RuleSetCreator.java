@@ -17,12 +17,12 @@ public class RuleSetCreator {
         this.ruleSet = new RuleSet(id);
     }
 
-    public RuleSetCreator addStat(String name, String description, short minValue, short maxValue, short defaultValue) {
+    public RuleSetCreator addStat(String name, String description, int minValue, int maxValue, int defaultValue) {
         ruleSet.getStats().put(name, new StatType(name, description, minValue, maxValue, defaultValue));
         return this;
     }
 
-    public RuleSetCreator addStat(String name, String description, String minf, String maxf, short defaultValue, List<String> deps, ComputeStrategy cs) {
+    public RuleSetCreator addStat(String name, String description, String minf, String maxf, int defaultValue, List<String> deps, ComputeStrategy cs) {
         ruleSet.getStats().put(name, new StatType(name, description, minf, maxf, defaultValue, deps, cs));
         return this;
     }
@@ -39,7 +39,7 @@ public class RuleSetCreator {
             }
         }
 
-        List<String> dependencies = GraphUtils.KhansAlgorithm(stats);
+        List<String> dependencies = GraphUtils.kahnsAlgorithm(stats);
 
         ruleSet.getDepQueue().clear();
         ruleSet.getDepQueue().addAll(dependencies);

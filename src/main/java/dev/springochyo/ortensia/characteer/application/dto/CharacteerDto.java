@@ -7,6 +7,5 @@ public record CharacteerDto(
         String rulesetId,
         String name,
         String description,
-        List<String> depQueue,
-        Map<String, Short> stats
+        Map<String, List<Integer>> stats
 ) {}

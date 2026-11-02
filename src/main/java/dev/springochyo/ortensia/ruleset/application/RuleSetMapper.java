@@ -20,7 +20,8 @@ public class RuleSetMapper {
 
         return new RuleSetDto(
                 obj.getRulesetId(),
-                stats
+                stats,
+                obj.getDepQueue()
         );
     }
 
@@ -31,7 +32,8 @@ public class RuleSetMapper {
 
         return new RuleSet(
                 dto.rulesetId(),
-                stats
+                stats,
+                dto.depQueue()
         );
     }
 }

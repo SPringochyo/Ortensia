@@ -4,50 +4,32 @@ import dev.springochyo.ortensia.ruleset.core.StatType;
 
 public class Stat {
     private final StatType type;
-    private short currentValue;
-    private short minComputableValue;
-    private short maxComputableValue;
+    private int currentValue;
+    private int minComputableValue;
+    private int maxComputableValue;
 
     public Stat(StatType type) {
         this.type = type;
         this.currentValue = type.getDefaultValue();
     }
 
-//  хз понадобится или нет, пока пусть висит
-//    public short clamp(short value) {
-//        if (!type.isComputable()) {
-//            value = type.clamp(value);
-//            return value;
-//        }
-//        value = (short) Math.min(value, maxComputableValue);
-//        value = (short) Math.max(minComputableValue, value);
-//        return value;
-//    }
-
-    public void changeStat(short diff) {
-        if (!type.isComputable())
-            currentValue = type.clamp((short) (currentValue + diff));
-        else {
-            currentValue = (short) Math.min(currentValue + diff, maxComputableValue);
-            currentValue = (short) Math.max(minComputableValue, currentValue);
-        }
+    public int clamp(int value) {
+        return Math.clamp(value, getMinValue(), getMaxValue());
     }
 
-    public void setCurrentValue(short currentValue) {
-        if (!type.isComputable())
-            currentValue = type.clamp(currentValue);
-        else {
-            currentValue = (short) Math.min(currentValue, maxComputableValue);
-            currentValue = (short) Math.max(minComputableValue, currentValue);
-        }
-        this.currentValue = currentValue;
+    public void changeStat(int diff) {
+        currentValue = clamp(currentValue + diff);
     }
 
-    public void setMinComputableValue(short minComputableValue) {
+    public void setCurrentValue(int currentValue) {
+        this.currentValue = clamp(currentValue);
+    }
+
+    public void setMinComputableValue(int minComputableValue) {
         this.minComputableValue = minComputableValue;
     }
 
-    public void setMaxComputableValue(short maxComputableValue) {
+    public void setMaxComputableValue(int maxComputableValue) {
         this.maxComputableValue = maxComputableValue;
     }
 
@@ -55,17 +37,17 @@ public class Stat {
         return type;
     }
 
-    public short getCurrentValue() {
+    public int getCurrentValue() {
         return currentValue;
     }
 
-    public short getMinValue() {
+    public int getMinValue() {
         if (type.isComputable())
             return minComputableValue;
         return type.getMinValue();
     }
 
-    public short getMaxValue() {
+    public int getMaxValue() {
         if (type.isComputable())
             return maxComputableValue;
         return type.getMaxValue();

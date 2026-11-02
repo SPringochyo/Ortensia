@@ -18,7 +18,7 @@ public class CharacteerCreator {
     }
 
     public Characteer create() {
-        characteer.recomputeStats();
+        characteer.initializeStats();
         return characteer;
     }
 }

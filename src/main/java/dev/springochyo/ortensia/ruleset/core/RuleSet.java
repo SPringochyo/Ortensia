@@ -15,9 +15,10 @@ public class RuleSet {
         stats = new HashMap<>();
     }
 
-    public RuleSet(String id, Map<String, StatType> stats) {
+    public RuleSet(String id, Map<String, StatType> stats, List<String> depQueue) {
         this.rulesetId = id;
         this.stats = stats;
+        this.depQueue.addAll(depQueue);
     }
 
     public String getRulesetId() {
