@@ -6,30 +6,34 @@ import dev.springochyo.ortensia.ruleset.core.RuleSet;
 import dev.springochyo.ortensia.ruleset.core.StatType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RuleSetMapper {
     private RuleSetMapper() {}
 
     public static RuleSetDto toDto(RuleSet obj) {
         List<StatTypeDto> stats = new ArrayList<>();
-        for (StatType type : obj.getStats())
-            stats.add(StatTypeMapper.toDto(type));
+        for (String key : obj.getStats().keySet())
+            stats.add(StatTypeMapper.toDto(obj.getStats().get(key)));
 
         return new RuleSetDto(
                 obj.getRulesetId(),
-                stats
+                stats,
+                obj.getDepQueue()
         );
     }
 
     public static RuleSet toObj(RuleSetDto dto) {
-        List<StatType> stats = new ArrayList<>();
+        Map<String, StatType> stats = new HashMap<>();
         for (StatTypeDto type : dto.stats())
-            stats.add(StatTypeMapper.toObj(type));
+            stats.put(type.name(), StatTypeMapper.toObj(type));
 
         return new RuleSet(
                 dto.rulesetId(),
-                stats
+                stats,
+                dto.depQueue()
         );
     }
 }

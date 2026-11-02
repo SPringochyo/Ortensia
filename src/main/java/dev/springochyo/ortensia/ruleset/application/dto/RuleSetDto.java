@@ -4,5 +4,6 @@ import java.util.List;
 
 public record RuleSetDto(
         String rulesetId,
-        List<StatTypeDto> stats
+        List<StatTypeDto> stats,
+        List<String> depQueue
 ) {}

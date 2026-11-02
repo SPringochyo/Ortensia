@@ -1,5 +1,9 @@
 package dev.springochyo.ortensia.ruleset.core;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+
+import java.util.HashSet;
 import java.util.List;
 
 public class StatType{
@@ -7,37 +11,45 @@ public class StatType{
     private final String description;
     private final String minValueFormula;
     private final String maxValueFormula;
-    private final short minValue;
-    private final short maxValue;
+    private final Expression minExp;
+    private final Expression maxExp;
+    private final int minValue;
+    private final int maxValue;
+    private final int defaultValue;
     private final List<String> dependencies;
     private final boolean computable;
+    private final ComputeStrategy computeStrategy;
 
-    public StatType(String name, String description, short minValue, short maxValue) {
+    public StatType(String name, String description, int minValue, int maxValue, int defaultValue) {
         this.name = name;
         this.description = description;
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.defaultValue = defaultValue;
         this.minValueFormula = null;
         this.maxValueFormula = null;
+        this.minExp = null;
+        this.maxExp = null;
         this.dependencies = null;
         this.computable = false;
+        this.computeStrategy = ComputeStrategy.DEFAULT;
     }
 
-    public StatType(String name, String description, String minValueFormula, String maxValueFormula, List<String> dependencies) {
+    public StatType(String name, String description, String minValueFormula, String maxValueFormula, int defaultValue, List<String> dependencies, ComputeStrategy computeStrategy) {
         this.name = name;
         this.description = description;
         this.minValueFormula = minValueFormula;
         this.maxValueFormula = maxValueFormula;
+        this.minExp = new ExpressionBuilder(minValueFormula)
+                .variables(new HashSet<>(dependencies)).build();
+        this.maxExp = new ExpressionBuilder(maxValueFormula)
+                .variables(new HashSet<>(dependencies)).build();
+        this.defaultValue = defaultValue;
         this.dependencies = dependencies;
-        this.minValue = Short.MIN_VALUE;
-        this.maxValue = Short.MAX_VALUE;
+        this.minValue = Integer.MIN_VALUE;
+        this.maxValue = Integer.MAX_VALUE;
         this.computable = true;
-    }
-
-    public short clamp(short value) {
-        value = (short) Math.min(value, maxValue);
-        value = (short) Math.max(minValue, value);
-        return value;
+        this.computeStrategy = computeStrategy;
     }
 
     public String getName() {
@@ -48,14 +60,6 @@ public class StatType{
         return description;
     }
 
-    public short getMinValue() {
-        return minValue;
-    }
-
-    public short getMaxValue() {
-        return maxValue;
-    }
-
     public String getMinValueFormula() {
         return minValueFormula;
     }
@@ -64,7 +68,35 @@ public class StatType{
         return maxValueFormula;
     }
 
+    public Expression getMinExp() {
+        return new Expression(minExp);
+    }
+
+    public Expression getMaxExp() {
+        return new Expression(maxExp);
+    }
+
+    public int getMinValue() {
+        return minValue;
+    }
+
+    public int getMaxValue() {
+        return maxValue;
+    }
+
+    public int getDefaultValue() {
+        return defaultValue;
+    }
+
+    public List<String> getDependencies() {
+        return dependencies;
+    }
+
     public boolean isComputable() {
         return computable;
+    }
+
+    public ComputeStrategy getComputeStrategy() {
+        return computeStrategy;
     }
 }

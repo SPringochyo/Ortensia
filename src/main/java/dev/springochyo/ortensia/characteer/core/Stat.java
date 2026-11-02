@@ -4,32 +4,52 @@ import dev.springochyo.ortensia.ruleset.core.StatType;
 
 public class Stat {
     private final StatType type;
-    private short currentValue = 0;
-    private short minComputableValue;
-    private short maxComputableValue;
+    private int currentValue;
+    private int minComputableValue;
+    private int maxComputableValue;
 
     public Stat(StatType type) {
         this.type = type;
+        this.currentValue = type.getDefaultValue();
     }
 
-    public void changeStat(short diff) {
-        if (!type.isComputable())
-            currentValue = type.clamp((short) (currentValue + diff));
-        else {
-            currentValue = (short) Math.min(currentValue + diff, maxComputableValue);
-            currentValue = (short) Math.max(minComputableValue, currentValue);
-        }
+    public int clamp(int value) {
+        return Math.clamp(value, getMinValue(), getMaxValue());
     }
 
-    public void setCurrentValue(short currentValue) {
-        this.currentValue = currentValue;
+    public void changeStat(int diff) {
+        currentValue = clamp(currentValue + diff);
+    }
+
+    public void setCurrentValue(int currentValue) {
+        this.currentValue = clamp(currentValue);
+    }
+
+    public void setMinComputableValue(int minComputableValue) {
+        this.minComputableValue = minComputableValue;
+    }
+
+    public void setMaxComputableValue(int maxComputableValue) {
+        this.maxComputableValue = maxComputableValue;
     }
 
     public StatType getType() {
         return type;
     }
 
-    public short getCurrentValue() {
+    public int getCurrentValue() {
         return currentValue;
+    }
+
+    public int getMinValue() {
+        if (type.isComputable())
+            return minComputableValue;
+        return type.getMinValue();
+    }
+
+    public int getMaxValue() {
+        if (type.isComputable())
+            return maxComputableValue;
+        return type.getMaxValue();
     }
 }

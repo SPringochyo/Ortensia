@@ -1,27 +1,35 @@
 package dev.springochyo.ortensia.ruleset.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RuleSet {
     private final String rulesetId;
-    private final List<StatType> stats;
+    private final Map<String, StatType> stats;
+    private final List<String> depQueue = new ArrayList<>();
 
     public RuleSet(String id) {
         this.rulesetId = id;
-        stats = new ArrayList<>();
+        stats = new HashMap<>();
     }
 
-    public RuleSet(String id, List<StatType> stats) {
+    public RuleSet(String id, Map<String, StatType> stats, List<String> depQueue) {
         this.rulesetId = id;
         this.stats = stats;
+        this.depQueue.addAll(depQueue);
     }
 
     public String getRulesetId() {
         return rulesetId;
     }
 
-    public List<StatType> getStats() {
+    public Map<String, StatType> getStats() {
         return stats;
+    }
+
+    public List<String> getDepQueue() {
+        return depQueue;
     }
 }

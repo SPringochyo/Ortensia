@@ -10,17 +10,35 @@ public class StatTypeMapper {
         return new StatTypeDto(
                 obj.getName(),
                 obj.getDescription(),
+                obj.getMinValueFormula(),
+                obj.getMaxValueFormula(),
                 obj.getMinValue(),
-                obj.getMaxValue()
+                obj.getMaxValue(),
+                obj.getDefaultValue(),
+                obj.getDependencies(),
+                obj.isComputable(),
+                obj.getComputeStrategy()
         );
     }
 
     public static StatType toObj(StatTypeDto dto) {
+        if (dto.computable())
+            return new StatType(
+                    dto.name(),
+                    dto.description(),
+                    dto.minValueFormula(),
+                    dto.maxValueFormula(),
+                    dto.defaultValue(),
+                    dto.dependencies(),
+                    dto.computeStrategy()
+            );
+
         return new StatType(
                 dto.name(),
                 dto.description(),
                 dto.minValue(),
-                dto.maxValue()
+                dto.maxValue(),
+                dto.defaultValue()
         );
     }
 }
